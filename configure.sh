@@ -31,18 +31,18 @@ echo ''
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 # oh-my-zsh plugin install
-# echo ''
-# echo "Now installing oh-my-zsh plugins..."
-# echo ''
-# git clone https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
-# git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
-# git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
+echo ''
+echo "Now installing oh-my-zsh plugins..."
+echo ''
+git clone https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
 
 # powerlevel9k install
-# echo ''
-# echo "Now installing powerlevel9k..."
-# echo ''
-# git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
+echo ''
+echo "Now installing powerlevel9k..."
+echo ''
+git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
 
 # vimrc vundle install
 # echo ''
@@ -85,37 +85,19 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 
 # Pull down personal dotfiles
 echo ''
-read -p "Do you want to use bechelani's dotfiles? y/n" -n 1 -r
-echo    # (optional) move to a new line
-if [[ $REPLY =~ ^[Yy]$ ]]
+
+echo "Now pulling down bechelani dotfiles..."
+git clone https://github.com/bechelani/dotfiles-vso.git ~/.dotfiles
+echo ''
+cd $HOME/.dotfiles && echo "switched to .dotfiles dir..."
+echo ''
+echo "Setting script to exectubale" && chmod +x $HOME/.dotfiles/script/bootstrap
+echo "Now configuring symlinks..." && $HOME/.dotfiles/script/bootstrap
+if [[ $? -eq 0 ]]
 then
-  echo ''
-	echo "Now pulling down bechelani dotfiles..."
-	git clone https://github.com/bechelani/dotfiles.git ~/.dotfiles
-	echo ''
-	cd $HOME/.dotfiles && echo "switched to .dotfiles dir..."
-	echo ''
-	echo "Checking out WSL branch..." && git checkout wsl
-	echo ''
-	echo "Setting script to exectubale" && chmod +x $HOME/.dotfiles/script/bootstrap
-	echo "Now configuring symlinks..." && $HOME/.dotfiles/script/bootstrap
-    if [[ $? -eq 0 ]]
-    then
-        echo "Successfully configured your environment with bechelani's dotfiles..."
-    else
-        echo "bechelani's dotfiles were not applied successfully..." >&2
-fi
+	echo "Successfully configured your environment with bechelani's dotfiles..."
 else
-	echo ''
-  echo "You chose not to apply bechelani's dotfiles. You will need to configure your environment manually..."
-	echo ''
-	echo "Setting defaults for .zshrc and .bashrc..."
-	echo ''
-	echo "source $HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc && echo "added zsh-syntax-highlighting to .zshrc..."
-	echo ''
-	echo "source $HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc && echo "added zsh-autosuggestions to .zshrc..."
-	echo ''
-	echo "source $HOME/.git-completion.bash" >> ${ZDOTDIR:-$HOME}/.bashrc && echo "added git-completion to .bashrc..."
+	echo "bechelani's dotfiles were not applied successfully..." >&2
 fi
 
 # Setup and configure az cli
@@ -139,21 +121,16 @@ fi
 # fi
 
 # Set default shell to zsh
-echo ''
-read -p "Do you want to change your default shell? y/n" -n 1 -r
-echo ''
-if [[ $REPLY =~ ^[Yy]$ ]]
+echo "Now setting default shell..."
+
+chsh -s $(which zsh); exit 0
+
+if [[ $? -eq 0 ]]
 then
-	echo "Now setting default shell..."
-    chsh -s $(which zsh); exit 0
-    if [[ $? -eq 0 ]]
-    then
-        echo "Successfully set your default shell to zsh..."
-    else
-        echo "Default shell not set successfully..." >&2
-fi
+	echo "Successfully set your default shell to zsh..."
 else
-    echo "You chose not to set your default shell to zsh. Exiting now..."
+	echo "Default shell not set successfully..." >&2
 fi
+
 echo ''
-echo '	Badass WSL terminal installed!'
+echo '	Badass VSO terminal installed!'
